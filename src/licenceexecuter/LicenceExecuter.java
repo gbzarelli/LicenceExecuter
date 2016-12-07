@@ -47,6 +47,7 @@ public class LicenceExecuter {
             licenceExecuter.run();
         } catch (Throwable ex) {
             ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "PROBLEMAS NA EXECUÇÃO", "ATENÇÃO", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -93,7 +94,7 @@ public class LicenceExecuter {
                 updateKey(obKey);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "POSSÍVEL ALTERAÇÃO NO RELÓGIO DO SISTEMA! VERIFIQUE", "ATENÇAO", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "POSSÍVEL ALTERAÇÃO NO RELÓGIO DO SISTEMA! VERIFIQUE", "ATENÇÃO", JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -110,7 +111,7 @@ public class LicenceExecuter {
         } catch (Throwable t) {
             t.printStackTrace();
         }
-        JOptionPane.showMessageDialog(null, "CHAVE INVÁLIDA", "ATENÇAO", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "CHAVE INVÁLIDA", "ATENÇÃO", JOptionPane.ERROR_MESSAGE);
         return false;
     }
 
