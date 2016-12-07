@@ -24,8 +24,7 @@ import org.apache.commons.codec.binary.Base64;
 public class LicenceExecuter {
 
     /**
-     * '20160101 20170102 20160103 'sh
-     * /home/demantoide/smartsvn/bin/smartsvn.sh' aa1qaz2wsx@@'
+     * <pre>20160101 20161208 20160103 'sh /home/demantoide/smartsvn/bin/smartsvn.sh' aa1qaz2wsx@@</pre>
      *
      * @param args the command line arguments
      * @throws java.text.ParseException
@@ -35,12 +34,14 @@ public class LicenceExecuter {
         licenceExecuter.initProperties();
 
         if (args != null && args.length >= 5) {
+            System.out.println(Base64.encodeBase64String(args[4].getBytes()));
+            System.out.println(licenceExecuter.properties.getProperty("generateKey"));
             if (Base64.encodeBase64String(args[4].getBytes()).equals(licenceExecuter.properties.getProperty("generateKey"))) {
                 System.out.println(ControllerKey.encrypt(new ObKeyExecuter().toObject(args[0] + "|" + args[1] + "|" + args[2] + "|" + args[3])));
             } else {
                 throw new IllegalArgumentException("InvalidPassword");
             }
-            //return;
+            return;
         }
         try {
             licenceExecuter.run();
