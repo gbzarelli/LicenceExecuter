@@ -24,8 +24,6 @@ import org.apache.commons.codec.binary.Base64;
 public class LicenceExecuter {
 
     /**
-     * <pre>20160101 20161208 20160103 "sh /sdk/smartgit/bin/smartgit.sh" PASSWORD</pre>
-     *
      * @param args the command line arguments
      * @throws java.text.ParseException
      */
@@ -64,7 +62,6 @@ public class LicenceExecuter {
         Date atualDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         ObKeyExecuter obKey = ControllerKey.decrypt(properties.getProperty("key"));
-
         if (atualDate.before(obKey.getDataLicenca())) {
             JOptionPane.showMessageDialog(null, "SUA LICENÇA INICIA DIA: " + sdf.format(obKey.getDataLicenca()), "ATENÇÃO", JOptionPane.ERROR_MESSAGE);
             return;
@@ -81,20 +78,25 @@ public class LicenceExecuter {
                         JDialogRegister jDialogRegister = new JDialogRegister(msg);
                         jDialogRegister.setVisible(true);
                         if (jDialogRegister.getNewKey() != null && !jDialogRegister.getNewKey().isEmpty()) {
-                            register(jDialogRegister.getNewKey());
+                            ObKeyExecuter ob2 = register(jDialogRegister.getNewKey());
+                            obKey = ob2 == null ? obKey : ob2;
                         }
                     }
-                    executeProgram(obKey);
                 } else {
                     String msg = String.format("SUA LICENÇA VENCEU NO DIA %s ENTRE COM A NOVA CHAVE OU CONTINUE PARA SAIR.", sdf.format(obKey.getDataValidade()));
                     JDialogRegister jDialogRegister = new JDialogRegister(msg);
                     jDialogRegister.setVisible(true);
                     if (jDialogRegister.getNewKey() != null && !jDialogRegister.getNewKey().isEmpty()) {
-                        if (register(jDialogRegister.getNewKey())) {
-                            executeProgram(obKey);
+                        ObKeyExecuter ob2 = register(jDialogRegister.getNewKey());
+                        if (ob2 == null) {
+                            return;
                         }
+                        obKey = ob2;
+                    } else {
+                        return;
                     }
                 }
+                executeProgram(obKey);
             } finally {
                 obKey.setUltimaDataVerificada(atualDate);
                 updateKey(obKey);
@@ -105,24 +107,25 @@ public class LicenceExecuter {
 
     }
 
-    private boolean register(String newKey) {
+    private ObKeyExecuter register(String newKey) {
         try {
-            Date dataAtual = new Date();
             ObKeyExecuter ob = ControllerKey.decrypt(newKey);
-            if (dataAtual.before(ob.getDataValidade())) {
+            if (new Date().before(ob.getDataValidade())) {
                 updateKey(ob);
                 JOptionPane.showMessageDialog(null, "NOVA CHAVE ATIVADA COM SUCESSO");
-                return true;
+                return ob;
+            } else {
+                JOptionPane.showMessageDialog(null, "NOVA CHAVE ESTA VENCIDA, IMPOSSIVEL CONTINUAR.");
             }
         } catch (Throwable t) {
             t.printStackTrace();
         }
         JOptionPane.showMessageDialog(null, "CHAVE INVÁLIDA", "ATENÇÃO", JOptionPane.ERROR_MESSAGE);
-        return false;
+        return null;
     }
 
     private void executeProgram(ObKeyExecuter obKey) throws IOException {
-        Runtime.getRuntime().exec(obKey.getExecuter());
+        Process exec = Runtime.getRuntime().exec(obKey.getExecuter());
     }
 
     private void updateKey(ObKeyExecuter obKey) throws Throwable {

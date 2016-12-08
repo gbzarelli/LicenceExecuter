@@ -1,0 +1,23 @@
+Parametros a serem passados:
+- Data inicio licença
+- Data fim licença
+- Data atual
+- Caminho do executavel
+- Senha para gerar
+
+Forato do parametro (cada parametro deve ser separado por espaço)
+20160101 20161230 20160107 "C:\aaa\bbb\ccc\arquivo.exe" aa1qaz2wsx@@
+
+Chamada para realizar a geração da key:
+java -jar LicenceExecuter.jar 20160101 20161230 20160107 "C:\aaa\bbb\ccc\arquivo.exe" aa1qaz2wsx@@
+
+Exemplo de saida do programa:
+
+$java -jar LicenceExecuter.jar 20160101 20171208 20160103 "sh /home/demantoide/smartgit/bin/smartgit.sh" aa1qaz2wsx@@
+YWExcWF6MndzeEBA
+YWExcWF6MndzeEBA
+R4z/MBPrTQ3FDXA28XUlj0XRD9JCpev+V/uPpT4J99moZBwNimh0xWXEzxEm+jfaG+b5qqc3FOQk6zeRDQzYjGnBJ5pOUSrPH21bdj3Vcw8=
+
+Para primeira configuração basta copiar a ultima linha e colar no arquivo central.properties na seguinte linha:
+key=xxxx(subistituir xxx pela chave)xxxxx
+
