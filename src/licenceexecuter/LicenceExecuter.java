@@ -24,7 +24,7 @@ import org.apache.commons.codec.binary.Base64;
 public class LicenceExecuter {
 
     /**
-     * <pre>20160101 20161208 20160103 'sh /home/demantoide/smartsvn/bin/smartsvn.sh' aa1qaz2wsx@@</pre>
+     * <pre>20160101 20161208 20160103 "sh /sdk/smartgit/bin/smartgit.sh" PASSWORD</pre>
      *
      * @param args the command line arguments
      * @throws java.text.ParseException
@@ -64,6 +64,12 @@ public class LicenceExecuter {
         Date atualDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         ObKeyExecuter obKey = ControllerKey.decrypt(properties.getProperty("key"));
+
+        if (atualDate.before(obKey.getDataLicenca())) {
+            JOptionPane.showMessageDialog(null, "SUA LICENÇA INICIA DIA: " + sdf.format(obKey.getDataLicenca()), "ATENÇÃO", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         if (atualDate.after(obKey.getUltimaDataVerificada())) {
             try {
                 if (atualDate.before(obKey.getDataValidade())) {
